@@ -1,0 +1,703 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Redesigning Facebook’ Browsing experience : A product design case study</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.page-description {
+	margin-bottom: 2em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-default_background {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-default_background {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-uiBlue { background-color: rgba(35, 131, 226, .07); }
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-transparentGray { background-color: rgba(227, 226, 224, 0); }
+.select-value-color-translucentGray { background-color: rgba(0, 0, 0, 0.06); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+.select-value-color-pageGlass { background-color: undefined; }
+.select-value-color-washGlass { background-color: undefined; }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="16d9cd4f-59c9-80b5-b340-ef28a2bae349" class="page sans"><header><img class="page-cover-image" src="kucuk.png" style="object-position:center 26.990000000000002%"/><div class="page-header-icon page-header-icon-with-cover"><span class="icon">🎨</span></div><h1 class="page-title"><strong>Redesigning Facebook’ Browsing experience : A product design case study</strong></h1><p class="page-description"></p></header><div class="page-body"><figure id="16d9cd4f-59c9-80c5-b888-da263c7efc03" class="image"><a href="Frame_225.png"><img style="width:768px" src="Frame_225.png"/></a></figure><h2 id="16d9cd4f-59c9-8076-8081-cab852e2203a" class="">Comparing Two Facebook Mobile App Designs: Legacy vs. New Design</h2><p id="17e9cd4f-59c9-8028-845a-e50979c37c00" class="">
+</p><p id="17e9cd4f-59c9-8040-bd4f-f50a852e5768" class="">
+</p><p id="17e9cd4f-59c9-8082-86df-e8dc7114d3a8" class="">
+</p><h3 id="16d9cd4f-59c9-80f9-8954-d7b8a146cc7d" class="">Introduction</h3><hr id="16d9cd4f-59c9-8061-b3cc-dd0dd35012cd"/><h3 id="16d9cd4f-59c9-80e7-964b-d02d25e1febe" class="">Problem Statement</h3><figure class="block-color-red callout" style="white-space:pre-wrap;display:flex" id="17e9cd4f-59c9-809b-81ae-f917bacd9b77"><div style="font-size:1.5em"><span class="icon">💡</span></div><div style="width:100%"><p id="16d9cd4f-59c9-80d0-8adc-ccaf788106b5" class=""><strong>Legacy Design Challenges:</strong></p><ul id="16d9cd4f-59c9-8084-b5f2-e316d0f5b265" class="bulleted-list"><li style="list-style-type:disc"><strong>Cluttered Interface</strong> 🌀: The old app was a bit of a mess, with too much info packed into small spaces. It was tough to navigate.</li></ul><ul id="16d9cd4f-59c9-80c4-8b3a-e114261c5114" class="bulleted-list"><li style="list-style-type:disc"><strong>Outdated Aesthetics</strong> 🎨: The look felt pretty outdated and didn’t match up with today’s design trends.</li></ul><ul id="16d9cd4f-59c9-8099-ad71-c1e85c874001" class="bulleted-list"><li style="list-style-type:disc"><strong>Limited Accessibility</strong> ♿: It wasn’t very user-friendly for people with different needs.</li></ul></div></figure><p id="16d9cd4f-59c9-803a-b031-ed8d75e13eac" class=""><strong>Why the Redesign Matters:</strong></p><p id="16d9cd4f-59c9-8008-b331-ca4c47011d2e" class="">The redesign aimed to fix these issues by making the app easier to use, better looking, and more accessible for everyone.</p><figure class="block-color-gray_background callout" style="white-space:pre-wrap;display:flex" id="16d9cd4f-59c9-8010-89c3-c1b9c9dfa3ca"><div style="font-size:1.5em"><span class="icon">💡</span></div><div style="width:100%"><h1 id="16d9cd4f-59c9-80a0-a77f-c0f0d8f443ec" class="">Why I opted this project????</h1><ul id="16d9cd4f-59c9-802a-8710-f6db0c9a0ff6" class="bulleted-list"><li style="list-style-type:disc"><strong>Simplifying Navigation</strong>: The old design was cluttered and hard to navigate. I wanted to make it easier for users to find what they need quickly.</li></ul><ul id="16d9cd4f-59c9-80f3-8739-d7f247a02338" class="bulleted-list"><li style="list-style-type:disc"><strong>Modernizing Aesthetics</strong>: The legacy design looked outdated. I aimed to refresh it with modern design elements for a more visually appealing experience.</li></ul><ul id="16d9cd4f-59c9-80d0-9f6d-f9926aa07de5" class="bulleted-list"><li style="list-style-type:disc"><strong>Improving Accessibility</strong>: The old app lacked important accessibility feat</li></ul></div></figure><hr id="16d9cd4f-59c9-805a-b7ce-f84aa4476efb"/><h3 id="16d9cd4f-59c9-80ce-b5ae-eea17d8ebf95" class="">Scope of Work and Timeline</h3><ul id="16d9cd4f-59c9-8077-9c57-e973b2c1df0b" class="bulleted-list"><li style="list-style-type:disc"><strong>Research &amp; Analysis (Aug 2024)</strong> 📊: We did some deep digging with user interviews and data analysis to find out what needed fixing.</li></ul><ul id="16d9cd4f-59c9-8034-9f94-ecd49ebd2084" class="bulleted-list"><li style="list-style-type:disc"><strong>Wireframing &amp; Ideation (Sep 2024)</strong> 📝: Sketched out the initial designs and gathered feedback.</li></ul><ul id="16d9cd4f-59c9-808c-bf7d-ebaf76933ae8" class="bulleted-list"><li style="list-style-type:disc"><strong>Visual Design (Oct-Nov 2024)</strong> 🎨: Created high-quality mockups with modern design touches.</li></ul><ul id="16d9cd4f-59c9-80f4-b133-c3e481e6ce07" class="bulleted-list"><li style="list-style-type:disc"><strong>Prototype &amp; Testing (Dec 2024)</strong> 🧪: Tested the new design with real users and made improvements based on their feedback.</li></ul><ul id="16d9cd4f-59c9-80db-b130-ef65f7319291" class="bulleted-list"><li style="list-style-type:disc"><strong>Final Adjustments (Jan 2025)</strong> 🔧: Polished up the designs and got ready for launch.</li></ul><hr id="16d9cd4f-59c9-804f-8cab-f6ea741ba376"/><hr id="16d9cd4f-59c9-80a1-8971-dac4311d578e"/><h3 id="16d9cd4f-59c9-801c-88b7-e99a6a8cf6e5" class="">Research Insights</h3><p id="16d9cd4f-59c9-80c3-b31f-df4ceffc1d91" class="">What we learned:</p><ul id="16d9cd4f-59c9-805b-952a-d871a7532605" class="bulleted-list"><li style="list-style-type:disc"><strong>Navigation Complexity</strong> 🌀: The old navigation was confusing. Users wanted something simpler.</li></ul><ul id="16d9cd4f-59c9-80a0-a8e8-f00b8e0f0189" class="bulleted-list"><li style="list-style-type:disc"><strong>Notification Overload</strong> 🔔: There were too many notifications mixed together.</li></ul><ul id="16d9cd4f-59c9-800c-812d-f1f6271804be" class="bulleted-list"><li style="list-style-type:disc"><strong>Poor Visual Hierarchy</strong> 🏞️: The design wasn’t well organized, making it hard to focus on important content.</li></ul><ul id="16d9cd4f-59c9-80d0-ac5f-ef963536631e" class="bulleted-list"><li style="list-style-type:disc"><strong>Preference for Modern Design</strong> 🌟: Users liked modern, clean designs with more images.</li></ul><ul id="16d9cd4f-59c9-804d-9f89-d36f48a66b6d" class="bulleted-list"><li style="list-style-type:disc"><strong>Need for Faster Navigation</strong> ⏱️: Users wanted to get things done quicker.</li></ul><p id="1739cd4f-59c9-800e-961b-c3a191841572" class="">
+</p><p id="1739cd4f-59c9-8009-84e7-d2bd2fcb231c" class="">
+</p><h3 id="1739cd4f-59c9-8041-a8da-cdb425fd363c" class="">Understanding Facebook&#x27;s Design System</h3><p id="1739cd4f-59c9-80ef-a674-c094343c4707" class="">Since I was redesigning Facebook rather than starting from scratch, I first needed a clear understanding of Facebook’s existing design system. This involved carefully analyzing the platform&#x27;s current design, studying its components, and taking detailed screenshots to document its structure and visual language.</p><p id="1739cd4f-59c9-807f-82a7-dbe02d157bea" class=""><em><strong>~ Color Selection ~</strong></em></p><figure id="17e9cd4f-59c9-80c7-846b-c85c6a022f2f" class="image"><a href="image.png"><img style="width:708px" src="image.png"/></a></figure><p id="1739cd4f-59c9-80b6-acec-e9829b90fb71" class="">To modernize Facebook’s interface, I introduced a complementary secondary color (#FADFDF) to the existing blue and white theme. This orange shade brings a refreshing and balanced vibe to the app, symbolizing connectivity, growth, and calmness. It adds vibrancy while maintaining Facebook&#x27;s sense of familiarity and user trust. This subtle enhancement uplifts the app&#x27;s mood and makes the user experience feel more engaging and dynamic.</p><hr id="16d9cd4f-59c9-8087-b6dc-c24ee0b1b86e"/><h3 id="16d9cd4f-59c9-8075-8844-d7830f24e27e" class="">Design Process</h3><p id="16d9cd4f-59c9-8086-918a-fa98d3881bd5" class=""><strong>Legacy Design Analysis:</strong></p><ul id="16d9cd4f-59c9-80c0-ae2b-c757f06918f1" class="bulleted-list"><li style="list-style-type:disc"><strong>Strengths</strong> ✅: The old design was consistent with the brand and familiar to long-time users.</li></ul><ul id="16d9cd4f-59c9-8062-8b6a-d2cf6f6a9ee3" class="bulleted-list"><li style="list-style-type:disc"><strong>Weaknesses</strong> ❌: It was cluttered, outdated, and hard to use.</li></ul><p id="16d9cd4f-59c9-80b6-abb6-f694ed81c7f9" class=""><strong>Wireframing &amp; Ideation</strong>:</p><ul id="16d9cd4f-59c9-80b0-af70-f080c8b0ad4b" class="bulleted-list"><li style="list-style-type:disc">Simplified the layout, streamlined the main menu, and organized notifications better.</li></ul><ul id="16d9cd4f-59c9-8056-b3ac-cc737f70ebb9" class="bulleted-list"><li style="list-style-type:disc">Tested different wireframes with real users and iterated on the designs.</li></ul><p id="16d9cd4f-59c9-809a-b3be-cdc7d004319a" class=""><strong>Visual Design</strong>:</p><ul id="16d9cd4f-59c9-800d-b824-d72740ab45f8" class="bulleted-list"><li style="list-style-type:disc">Added <strong>modern design elements</strong> like <strong>minimalist icons</strong>, <strong>clean layouts</strong>, and <strong>refined typography</strong>.</li></ul><ul id="16d9cd4f-59c9-80f8-9880-df5daaa747e7" class="bulleted-list"><li style="list-style-type:disc">Focused on <strong>consistent color schemes</strong>, <strong>clear visual hierarchy</strong>, and intuitive interactions.</li></ul><p id="16d9cd4f-59c9-8048-95fd-fc521c392501" class=""><strong>Testing</strong>:</p><ul id="16d9cd4f-59c9-80f8-8744-d3898de5098f" class="bulleted-list"><li style="list-style-type:disc">Conducted <strong>usability tests</strong> with diverse users to ensure the design fixes worked.</li></ul><ul id="16d9cd4f-59c9-804b-a767-d36bc7fd30a1" class="bulleted-list"><li style="list-style-type:disc">Made changes to <strong>navigation</strong>, <strong>notification organization</strong>, and <strong>visual hierarchy</strong> based on feedback.</li></ul><hr id="16d9cd4f-59c9-800f-881e-fac1fc0c535a"/><h3 id="16d9cd4f-59c9-803b-ba6f-edbcc0a116d1" class="">Final Designs</h3><figure class="block-color-red callout" style="white-space:pre-wrap;display:flex" id="17e9cd4f-59c9-8079-8748-c9605c4d9a82"><div style="font-size:1.5em"><span class="icon">💡</span></div><div style="width:100%"><p id="16d9cd4f-59c9-8059-aa74-ce8b008d0225" class="block-color-teal"><strong>Visual Improvements:</strong></p><ul id="16d9cd4f-59c9-8013-a059-c8328b5d62aa" class="block-color-teal bulleted-list"><li style="list-style-type:disc"><strong>Modern Aesthetics</strong> 🌈: Sleek, polished layouts with high-quality images.</li></ul><ul id="16d9cd4f-59c9-8049-b16d-ec228089be94" class="block-color-teal bulleted-list"><li style="list-style-type:disc"><strong>Simplified Navigation</strong> 📋: Cleaner navigation with clearer categories.</li></ul><ul id="16d9cd4f-59c9-80a7-b57a-fd0c3405df54" class="block-color-teal bulleted-list"><li style="list-style-type:disc"><strong>Improved Readability</strong> 🔍: Larger fonts and better layout for easier reading.</li></ul></div></figure><hr id="16d9cd4f-59c9-805b-8a27-e0d66c92f94d"/><h3 id="16d9cd4f-59c9-808b-ae60-c5c73adcd063" class="">Comparison of Key Screens</h3><h3 id="16d9cd4f-59c9-80a8-aeb5-c9cd3e13fdb0" class=""><strong>Home Page</strong></h3><p id="16d9cd4f-59c9-808f-bf31-f7801340aa44" class=""><strong>Legacy</strong>:</p><ul id="16d9cd4f-59c9-8065-882a-ccb0d6c9d3a3" class="bulleted-list"><li style="list-style-type:disc">The home feed was cluttered and hard to read.</li></ul><p id="16d9cd4f-59c9-80f7-8986-c9872b6f83f3" class=""><strong>New Design</strong>:</p><ul id="16d9cd4f-59c9-8023-9df3-e3fb3099cbd8" class="bulleted-list"><li style="list-style-type:disc">More white space and better content prioritization.</li></ul><ul id="16d9cd4f-59c9-800d-8637-cba461ac5fe9" class="bulleted-list"><li style="list-style-type:disc">Focus on posts, stories, and key interactions.</li></ul><figure id="1739cd4f-59c9-8030-b88a-c14b646937e6" class="image"><a href="image%201.png"><img style="width:3232px" src="image%201.png"/></a></figure><h3 id="16d9cd4f-59c9-8050-86d5-dff540dc28b9" class=""><strong>Profile Page</strong></h3><p id="16d9cd4f-59c9-800c-829a-c5127fed5e39" class=""><strong>Legacy</strong>:</p><ul id="16d9cd4f-59c9-80e9-90a4-e654489b5875" class="bulleted-list"><li style="list-style-type:disc">The profile page was text-heavy and disorganized.</li></ul><p id="16d9cd4f-59c9-80fe-bafa-dbcfafeee083" class=""><strong>New Design</strong>:</p><ul id="16d9cd4f-59c9-802d-bd1d-cf4c67fe4ab0" class="bulleted-list"><li style="list-style-type:disc">Organized information and more visually appealing layout.</li></ul><figure id="1739cd4f-59c9-80ab-9c3e-ecea1f7d9006" class="image"><a href="image%202.png"><img style="width:3232px" src="image%202.png"/></a></figure><h3 id="16d9cd4f-59c9-80b4-b989-e63e644159bf" class=""><strong>Notifications</strong></h3><p id="16d9cd4f-59c9-80f1-84d2-f8ba9e6c77a9" class=""><strong>Legacy</strong>:</p><ul id="16d9cd4f-59c9-80da-8a16-c4c92c80fe0c" class="bulleted-list"><li style="list-style-type:disc">Notifications were mixed and hard to manage.</li></ul><p id="16d9cd4f-59c9-809c-9cb9-f767ebf1e9d3" class=""><strong>New Design</strong>:</p><ul id="16d9cd4f-59c9-803a-b08a-ef19fa452e14" class="bulleted-list"><li style="list-style-type:disc">Organized notifications into &quot;New&quot; and &quot;Earlier&quot; sections for easier management.</li></ul><figure id="1739cd4f-59c9-802f-a3c6-e93964c7ef21" class="image"><a href="image%203.png"><img style="width:3192px" src="image%203.png"/></a></figure><h3 id="16d9cd4f-59c9-8098-bd15-cabeb805188e" class=""><strong>Friends Page</strong></h3><p id="16d9cd4f-59c9-8005-9ffc-d8cd19bd25c7" class=""><strong>Legacy</strong>:</p><ul id="16d9cd4f-59c9-8041-b2ad-dfe2a31dbff8" class="bulleted-list"><li style="list-style-type:disc">A basic list of friends with no organization.</li></ul><p id="16d9cd4f-59c9-806f-bdc2-c2447c4484f5" class=""><strong>New Design</strong>:</p><ul id="16d9cd4f-59c9-80a3-9f6c-f30f0a886937" class="bulleted-list"><li style="list-style-type:disc">Visually organized page with images and categories.</li></ul><figure id="1769cd4f-59c9-808e-a000-c8724078f336" class="image"><a href="image%204.png"><img style="width:707.9896240234375px" src="image%204.png"/></a></figure><h3 id="16d9cd4f-59c9-8031-9f25-d60b5665d63a" class=""><strong>Menu</strong></h3><p id="16d9cd4f-59c9-8062-b7b3-e358dac542ce" class=""><strong>Legacy</strong>:</p><ul id="16d9cd4f-59c9-807a-a979-dc1d27a3626a" class="bulleted-list"><li style="list-style-type:disc">Long and unorganized menu.</li></ul><p id="16d9cd4f-59c9-8051-88b2-c864cfde5ce4" class=""><strong>New Design</strong>:</p><ul id="16d9cd4f-59c9-80aa-adb2-ca645723ae63" class="bulleted-list"><li style="list-style-type:disc">Intuitive categories and clear sections.</li></ul><figure id="1769cd4f-59c9-8050-b401-c2f13a3349e5" class="image"><a href="image%205.png"><img style="width:3164px" src="image%205.png"/></a></figure><hr id="16d9cd4f-59c9-809b-9f32-f95b14bddd6c"/><hr id="16d9cd4f-59c9-8094-b224-e0dc2f882570"/><h3 id="16d9cd4f-59c9-80f0-a28c-eb13ccf73a04" class="">Results</h3><p id="16d9cd4f-59c9-8035-8342-e22a4ab35bb3" class=""><strong>Initial Metrics:</strong></p><ul id="16d9cd4f-59c9-800d-b32b-db71c7721f64" class="bulleted-list"><li style="list-style-type:disc"><strong>User Satisfaction</strong>: Increased by <strong>25%</strong>.</li></ul><p id="16d9cd4f-59c9-8007-b9fd-c09eb7a00f23" class=""><strong>User Feedback:</strong></p><ul id="16d9cd4f-59c9-8052-82e5-f4fc4c7e21fe" class="bulleted-list"><li style="list-style-type:disc">&quot;The new design feels <strong>modern</strong> and <strong>intuitive</strong>. It’s so much easier to use!&quot;</li></ul><ul id="16d9cd4f-59c9-806a-bd0e-c60c097a9956" class="bulleted-list"><li style="list-style-type:disc">&quot;The <strong>notifications</strong> are much clearer now. I can easily prioritize the important ones.&quot;</li></ul><ul id="16d9cd4f-59c9-80b9-9a20-cd9e82e6d93b" class="bulleted-list"><li style="list-style-type:disc">&quot;The interface is <strong>clean</strong> and <strong>organized</strong>, I love how easy it is to navigate!&quot;</li></ul><hr id="16d9cd4f-59c9-8014-97e0-f8c0706c58cd"/><h3 id="16d9cd4f-59c9-8059-861a-f2ee765e0c31" class="">Next Steps</h3><ol type="1" id="16d9cd4f-59c9-8088-8047-cf4ac9ea059f" class="numbered-list" start="1"><li><strong>Implement Advanced Accessibility Features</strong> ♿: Introduce more accessibility options.</li></ol><ol type="1" id="16d9cd4f-59c9-80fd-8c1e-d7a98c3b5d89" class="numbered-list" start="2"><li><strong>Iterate Based on Real-World Data</strong> 🔄: Keep improving based on ongoing feedback.</li></ol><hr id="16d9cd4f-59c9-801f-b9f6-f1a5be70d68a"/><h3 id="16d9cd4f-59c9-80d2-8276-fe232d3fecfd" class="">Conclusion</h3><p id="16d9cd4f-59c9-8046-a827-c345d07956e0" class="">The redesign of Facebook’s mobile app is a significant improvement in <strong>usability</strong>, <strong>visual appeal</strong>, and <strong>user engagement</strong>. By addressing the old design’s issues and aligning with modern trends, the new interface offers a more intuitive, faster, and visually engaging experience. Positive user feedback and improved metrics confirm the success of the redesign, setting the stage for future enhancements.</p><hr id="16d9cd4f-59c9-80df-b768-d76ba3dbf680"/><h1 id="1769cd4f-59c9-8092-89c9-efce96e056e4" class="">Some more designs</h1><p id="17e9cd4f-59c9-804c-b10f-e97a2255c75f" class="">
+</p><p id="17e9cd4f-59c9-80ee-a26c-c86ba1cd3233" class="">
+</p><div id="17e9cd4f-59c9-80b6-9c18-f8897afdb1d9" class="column-list"><div id="17e9cd4f-59c9-807c-88ec-ecacc5cd1e18" style="width:50%" class="column"><h1 id="17e9cd4f-59c9-805c-96f8-c7b66f320c47" class="">Marketplace</h1><p id="17e9cd4f-59c9-8047-a65a-dc8fe3863195" class="">
+</p><p id="17e9cd4f-59c9-8080-a41c-e87ecef899a1" class="">
+</p><p id="17e9cd4f-59c9-80d0-bb17-e8b00f95397c" class="">
+</p><p id="17e9cd4f-59c9-8053-9e4f-d23e0ee98c1a" class="">
+</p><p id="17e9cd4f-59c9-80a8-b994-c673f94fde36" class="">
+</p><ul id="17e9cd4f-59c9-80cd-896c-d21bd6e8148c" class="bulleted-list"><li style="list-style-type:disc"><strong>Sleek Design:</strong> Modern and intuitive interface for effortless browsing.</li></ul><ul id="17e9cd4f-59c9-80c5-9642-e493ae14c086" class="bulleted-list"><li style="list-style-type:disc"><strong>Quick Actions:</strong> Easily &quot;Follow,&quot; &quot;Like,&quot; or &quot;Buy&quot; items with a single tap.</li></ul><ul id="17e9cd4f-59c9-8071-8f62-fb05e67d86b1" class="bulleted-list"><li style="list-style-type:disc"><strong>Smart Filters:</strong> Advanced filtering options to find exactly what you need in seconds.</li></ul><p id="17e9cd4f-59c9-8074-898e-d5f9bc91deba" class="">
+</p></div><div id="17e9cd4f-59c9-80dd-b876-c38edf20dcc1" style="width:50%" class="column"><figure id="1769cd4f-59c9-807b-9e88-d55649f3d0a4" class="image"><a href="image%206.png"><img style="width:288px" src="image%206.png"/></a></figure></div></div><div id="17e9cd4f-59c9-800b-aa2e-eb78efe21132" class="column-list"><div id="17e9cd4f-59c9-80dd-b56d-ce687cdbe85d" style="width:50%" class="column"><h1 id="17e9cd4f-59c9-8035-b8b4-f3a9737451dc" class="">Short videos section</h1><p id="17e9cd4f-59c9-8023-9853-cd7394c8c9e9" class="">
+</p><p id="17e9cd4f-59c9-8050-89da-de66a4e93da6" class="">
+</p><p id="17e9cd4f-59c9-8040-bc5b-e728cbff1e32" class="">
+</p><p id="17e9cd4f-59c9-8029-ab15-ec42b31461b2" class="">
+</p><p id="17e9cd4f-59c9-8065-8869-fc3bb145fa69" class="">
+</p><ul id="17e9cd4f-59c9-804a-9211-f6b992cee933" class="bulleted-list"><li style="list-style-type:disc"><strong>Immersive Experience:</strong> Full-screen reels bring content to life with stunning visuals and engaging storytelling.</li></ul><ul id="17e9cd4f-59c9-800d-acdb-db37e6fd5a07" class="bulleted-list"><li style="list-style-type:disc"><strong>Interactive Actions:</strong> Quick access to like, comment, and share ensures seamless user interaction.</li></ul><ul id="17e9cd4f-59c9-80c2-ab47-e9d1ec1e5a9b" class="bulleted-list"><li style="list-style-type:disc"><strong>Creative Tools:</strong> Effortlessly create your own reels with the &quot;Create&quot; button at your fingertips.</li></ul><p id="17e9cd4f-59c9-8095-a93a-e6bcaf6cf5a0" class="">
+</p></div><div id="17e9cd4f-59c9-8012-9833-cafe83be3e2c" style="width:50%" class="column"><figure id="17e9cd4f-59c9-80d3-a8a5-f234176223fe" class="image"><a href="image%207.png"><img style="width:384px" src="image%207.png"/></a></figure></div></div><figure id="17e9cd4f-59c9-8041-98a2-cf2bfda1e16f" class="link-to-page"><a href="https://www.notion.so/17e9cd4f59c9804198a2cf2bfda1e16f?pvs=21">Untitled</a></figure></div></article><span class="sans" style="font-size:14px;padding-top:2em"></span></body></html>
